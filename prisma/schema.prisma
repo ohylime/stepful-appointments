@@ -16,22 +16,25 @@ datasource db {
 enum Role {
   COACH
   STUDENT
+  ADMIN
 }
 
 model Coach {
   id          Int        @id @default(autoincrement())
   phoneNumber String     @unique
-  name        String?
+  firstName   String
+  lastName    String
   role        Role       @default(COACH)
   appts       Appt[]
   feedbacks   FeedBack[]
 }
 
 model Student {
-  id          Int     @id @default(autoincrement())
-  phoneNumber String  @unique
-  name        String?
-  role        Role    @default(STUDENT)
+  id          Int    @id @default(autoincrement())
+  phoneNumber String @unique
+  firstName   String
+  lastName    String
+  role        Role   @default(STUDENT)
   appts       Appt[]
 }
 
