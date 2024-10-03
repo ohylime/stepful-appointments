@@ -1,19 +1,11 @@
 'use client'
 import React, { useEffect, useState } from 'react';
-import { Role } from '@prisma/client';
+import {ICoach} from '../../interfaces'
 import { Nav } from '../../../components/Nav';
 import { Calender } from '../../../components/Calender';
 import { AppointmentForm } from '../../../components/AppointmentForm';
 import {Button} from '@nextui-org/button';
 
-import {Card} from '@nextui-org/card';
-
-interface Coach {
-  id: number;
-  firstName: string;
-  lastName: string;
-  role: Role
-}
 
 const CoachHeader = ({name}) => {
   if(name){
@@ -27,9 +19,9 @@ const CoachHeader = ({name}) => {
 } 
 
 
-const Coach: React.FC = ({ params }: { params: { id: string } }) => {
+const CoachDash: React.FC = ({ params }: { params: { id: string } }) => {
 
-  const [coach, setCoachData] = useState<Coach>();
+  const [coach, setCoachData] = useState<ICoach>();
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [isApptFormOpen, setApptForm] = useState<boolean>(false);
@@ -84,7 +76,7 @@ const Coach: React.FC = ({ params }: { params: { id: string } }) => {
 
       <div className='row-span-5 col-span-3 m-5'> 
         <h3>Calender</h3>
-        <Calender props={undefined}/>
+        <Calender appts={coach.appts}/>
       </div>
 
     </div>
@@ -93,4 +85,4 @@ const Coach: React.FC = ({ params }: { params: { id: string } }) => {
   );
 };
 
-export default Coach
+export default CoachDash
