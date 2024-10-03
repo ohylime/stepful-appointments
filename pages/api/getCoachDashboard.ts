@@ -5,7 +5,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'POST') {
 
     try {
-        console.log('Hello', req.body)
         const { id } = req.body;
     
         if (!id) {

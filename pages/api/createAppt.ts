@@ -6,7 +6,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     try {
         
-        const { id , startTime, endTime} = req.body;
+        const { id , startTime, endTime, studentId} = req.body;
     
         if (!id || !startTime ||  !endTime) {
           return res.status(400).json({ message: `Missing fields, got ${req.body}` });
@@ -14,16 +14,18 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
         console.log('Hello', req.body)
 
-    //   const coach = await prisma.coach.findUnique({
-    //     where: {id:  parseInt(id)},
-    //     include: {
-    //       appts : { 
-    //         include : {student : true}
-    //       }
-    //     }
-    //   });
+      const appt = await prisma.appt.create({
+          data : {
+            coach: {
+                connect: { id: parseInt(id) }, // Connect to an existing coach
+            },
+            student: studentId ? { connect: { id: studentId } } : undefined,
+            startTime : startTime,
+            endTime : endTime
+          }
+      });
       
-      res.status(200).json({});
+      res.status(200).json({message : 'Appointment Created', appt: appt});
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: 'Failed to fetch coach dashboard' });

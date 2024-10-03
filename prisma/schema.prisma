@@ -43,7 +43,7 @@ model Appt {
   coach     Coach     @relation(fields: [coachId], references: [id])
   coachId   Int
   student   Student?  @relation(fields: [studenId], references: [id])
-  studenId  Int
+  studenId  Int?
   feedback  FeedBack?
   startTime DateTime
   endTime   DateTime
