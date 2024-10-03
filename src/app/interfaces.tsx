@@ -3,6 +3,7 @@ export interface IStudent {
     id: number;
     firstName: string;
     lastName: string;
+    phoneNumber: string;
     role: Role
     appts?: Array<IAppts>
   }
@@ -11,6 +12,7 @@ export interface IStudent {
     id: number;
     firstName: string;
     lastName: string;
+    phoneNumber: string;
     role: Role
     appts?: Array<IAppts>
   }
@@ -23,5 +25,5 @@ export interface IStudent {
     endTime: string
     startTime : string
     student? : IStudent
-    studentId? : number
+    studenId? : number
   }

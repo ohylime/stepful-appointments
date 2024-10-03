@@ -17,17 +17,6 @@ import {
     const [apptDate, setDate] = useState({startTime: '', endTime: ''})
     const [isValid, setValid] = useState<boolean>()
 
-    // {
-    //     "calendar":{"identifier":"gregory"},
-    //     "era":"AD","year":2024,
-    //     "month":10,"day":23,
-    //     "timeZone":"America/New_York",
-    //     "offset":-14400000,"hour":5,
-    //     "minute":18,
-    //     "second":13,
-    //     "millisecond":945
-    // }
-
     function convertTimetoUTC(dateObj){
         const { year, month, day, hour } = dateObj;
         const startTime = new Date(year, month - 1, day, hour ).toISOString();
@@ -36,7 +25,7 @@ import {
     }
 
 
-
+    // Need to validate that it does not overlap with another appointment
     function validateStartTime(dateObj){
         const { year, month, day, hour, minute } = dateObj;
 
@@ -89,7 +78,7 @@ import {
                 )
                 console.log(resp)
                 close()
-               
+                window.location.reload();
             }catch(err){
                 console.log(err)
             }

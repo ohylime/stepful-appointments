@@ -1,5 +1,5 @@
 'use client'
-import { IAppts, IStudent, ICoach } from '@/app/interfaces';
+import { IAppts} from '@/app/interfaces';
 import React, { useEffect , useState} from 'react'
 import {
     Table,
@@ -9,6 +9,7 @@ import {
     TableRow,
     TableCell,
     getKeyValue,
+    Button
   } from "@nextui-org/react";
 import { Role } from '@prisma/client';
   
@@ -16,6 +17,7 @@ import { Role } from '@prisma/client';
   interface CalendarProps {
     appts: IAppts[];
     role: Role
+    userId : number
   }
 
   interface Row {
@@ -26,8 +28,30 @@ import { Role } from '@prisma/client';
     coach?: string
   }
 
-  export function Calender({appts, role} : CalendarProps){
+  export function Calender({appts, role, userId} : CalendarProps){
     const [rows, setRows] = useState<Row[]>([])
+
+
+
+    async function addStudentToAppointment(apptId :number, studentId :number){
+      try {
+       
+        const resp = await fetch(
+            '/api/assignAppt',
+            {method : "PUT",
+             headers : {'Content-Type': 'application/json'},
+             body: JSON.stringify({
+                studentId , apptId
+            })
+            }
+        )
+        console.log(resp)
+        window.location.reload();
+
+    }catch(err){
+        console.log(err)
+    }
+    }
 
     useEffect(()=> {
 
@@ -35,22 +59,26 @@ import { Role } from '@prisma/client';
             const start = new Date(each.startTime)
             const end = new Date(each.endTime)
             const currentRow =  {
-                key : each.id+'appt',
+                key : each.id+'-appt',
                 date: start.toLocaleDateString('en-US', {weekday :'short', year: 'numeric', month: '2-digit', day: '2-digit' })+ '',
                 start: start.toLocaleTimeString(),
                 end: end.toLocaleTimeString(),
             }
 
-            if(role === Role.COACH){
-                currentRow['student'] = each.student ?  each.student.lastName  : ""
+            if(role === Role.COACH && each.student  ){
+                currentRow['student'] =  each.student.lastName  
+                currentRow['feedback'] = <Button>Give</Button>
+                currentRow['phone'] = each.student.phoneNumber 
             }else {
                 currentRow['coach'] = each.coach ?  each.coach.lastName  : ""
+                currentRow['book'] = each.studenId ? 'You are Booked!':<Button onPress={()=>addStudentToAppointment(each.id, userId)}>Book</Button>
+                currentRow['phone'] = each.studenId ? each.coach.phoneNumber : ''
+               
             }
 
             return currentRow
         })
        setRows(details)
-       console.log(rows)
     },[])
   
     const columns = [
@@ -71,9 +99,13 @@ import { Role } from '@prisma/client';
             label: role === Role.COACH ? "Student" : "Coach",
           },
           {
-            key: "feedback",
-            label: "Feedback",
+            key:role === Role.COACH ? "feedback" : 'book',
+            label: role === Role.COACH ? "Feedback" : 'Availability',
           },
+          {
+            key:'phone',
+            label: 'Phone Number',
+          }
       ]
 
 

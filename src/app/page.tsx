@@ -79,17 +79,17 @@ export default function Home() {
 
         {students.map((student) => (
           <div key={student.id} className="p-[8px]">
+            <Link href={`/student/${student.id}`}>
             <Button className="bg-[#C2D3CC]"
                size="md"
             >
               Student : {student.lastName}
               </Button>
-      
+            </Link>
           </div>
         ))}
       </div>
       </Card>
-
     </div>
   );
 }
