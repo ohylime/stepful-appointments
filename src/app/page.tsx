@@ -1,9 +1,16 @@
 'use client'
 import { Role } from "@prisma/client";
-import Link from "next/link";
 import React, { useEffect, useState } from 'react';
-
+import {Button} from '@nextui-org/button';
+import {Card} from '@nextui-org/card';
+import Link from "next/link";
 interface Coach {
+  id: number;
+  firstName: string;
+  lastName: string;
+  role: Role
+}
+interface Student {
   id: number;
   firstName: string;
   lastName: string;
@@ -12,19 +19,21 @@ interface Coach {
 
 export default function Home() {
   const [coaches, setCoaches] = useState<Coach[]>([]);
+  const [students, setStudents] = useState<Student[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
 
   useEffect(() => {
-    const fetchCoaches = async () => {
+    const fetchUsers = async () => {
       try {
         const response = await fetch('/api/getAllUsers');
         if (!response.ok) {
           throw new Error('Failed to fetch coaches');
         }
         const data = await response.json();
-        setCoaches(data);
+        setCoaches(data.coaches);
+        setStudents(data.students);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -32,7 +41,7 @@ export default function Home() {
       }
     };
 
-    fetchCoaches();
+    fetchUsers();
   }, []);
 
   if (loading) return <div>Loading...</div>;
@@ -40,17 +49,47 @@ export default function Home() {
 
 
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      Students and Coach Schedule App 
-      <ul>
+    <div className="flex justify-center items-center h-full">
+      <Card className='flex flex-row items-center justify-center w-500 h-600'>
+      <div className="">
+        <div>
+        Coaches
+        </div>
+
         {coaches.map((coach) => (
-          <div key={coach.id}>
-            <p>Coach : {coach.lastName}</p>
-            <ul>
-            </ul>
+          <div key={coach.id} className="p-[8px]">
+            <Link href={`/coach/${coach.id}`}>
+            <Button 
+               className='bg-[#607581]'
+               size="md"
+            >
+              Coach : {coach.lastName}
+            </Button>
+            </Link>
+
+        
           </div>
         ))}
-      </ul>
+      </div>
+
+      <div className="">
+        <div>
+        Students
+        </div>
+
+        {students.map((student) => (
+          <div key={student.id} className="p-[8px]">
+            <Button className="bg-[#C2D3CC]"
+               size="md"
+            >
+              Student : {student.lastName}
+              </Button>
+      
+          </div>
+        ))}
+      </div>
+      </Card>
+
     </div>
   );
 }

@@ -5,7 +5,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'GET') {
     try {
       const coaches = await prisma.coach.findMany();
-      res.status(200).json(coaches);
+      const students = await prisma.student.findMany();
+      res.status(200).json({coaches, students});
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: 'Failed to fetch coaches' });
