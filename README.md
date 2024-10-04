@@ -2,14 +2,34 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
-First, run the development server:
+## SetUp
 
-```bash
-npm run dev
+Requirement : PostgreSQL locally
+
+Create database stepful in postgresql
+
+In project
+`touch .env`
+`touch .env.local`
+
+Add to .env.local file
 
 ```
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=postgres
+DB_PASSWORD=yourpass
+DB_NAME=stepful
+DATABASE_URL="postgresql://postgres:yourpass@localhost:5432/stepful?sslmode=prefer"
+```
 
-Create Databases
+Add to .env file
+
+```
+DATABASE_URL="postgresql://postgres:yourpass@localhost:5432/stepful?sslmode=prefer"
+```
+
+Create Database Table
 
 ```bash
 npx prisma migrate deploy
@@ -21,6 +41,12 @@ Seed Data
 ```bash
 npx ts-node  prisma/seed.ts
 
+```
+
+## Run development mode:
+
+```bash
+npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
